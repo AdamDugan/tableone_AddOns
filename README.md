@@ -10,7 +10,7 @@ A summary of the files:
 
 * summarize_regression_models.R
   * Creates a data.frame containing the results of an lm, glm, or lme model object.
-  * Requires the input of a dataframe containg the names of the variables included in the model along with the corresponding labels you want to display for those variables.
+  * Requires the input of a data.frame containg the names of the variables included in the model along with the corresponding labels you want to display for those variables.
   * For categorical/factor variables with more than 2 levels, it will, by default, list all levels including the reference level. For 2-level categorical variables, it will only list the non-reference level so adjust the variable labels accordingly.
   * Currently does not work with model objects from the lme4 or survival packages.
 
