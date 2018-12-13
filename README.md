@@ -5,8 +5,9 @@ A summary of the files:
 
 * combine_overall_and_stratified_tables.R
   * Creates a list that contains a data.frame ("$Table") that combines the overall and stratified results.
-  * Also includes other items in the list regarding missing observations.
+  * Also includes other items in the list regarding missing observations and statistical methods.
   * Currently does not work if you do not include a "strata" argument. If you want just the overall or just the stratified table, then you can create the combined table and remove the unwanted columns.
+  * Currently does not include the ability to conduct paired analyses (paired t-test, McNemar's, etc.) if the observations are correlated across the strata variable. I hope to add this soon.
 
 * summarize_regression_models.R
   * Creates a data.frame containing the results of an lm, glm, or lme model object.
