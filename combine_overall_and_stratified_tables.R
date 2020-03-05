@@ -14,6 +14,7 @@
 # exact.variables = an optional vector of variable names where Fisher's exact should be used.
 # exact.variables_detect.and.add.to.list = TRUE/FALSE whether or not to run a chi-square test on the categorical variables and if a warning is produced run Fisher's exact.
 # categorical.variables_force.exclusion.from.exact.analysis = an optional vector of variable names that will be coerced into the chi-square test.
+# categorical.variables_report.all.levels = if TRUE, then both levels of two-level categorical variables will be reported
 # non.normal.variables = an optional vector of variable names where a non-parametric test will be used instead of a t-test/one-way ANOVA.
 # all.patients.row.name = a character string that will be displayed in the top row of the table which typically contrains the strata-specific frequencies.
 # descriptors_include = TRUE/FALSE to include the statistic description after the variable label in the rows of the table.
@@ -48,6 +49,7 @@ Overall.And.Stratified = function(dataset = dat,
                                   exact.variables = NULL,
                                   exact.variables_detect.and.add.to.list = TRUE,
                                   categorical.variables_force.exclusion.from.exact.analysis = NULL,
+                                  categorical.variables_report.all.levels = FALSE,
                                   non.normal.variables = NULL,
                                   all.patients.row.name = "All Patients",
                                   descriptors_include = TRUE,
@@ -90,7 +92,8 @@ Overall.And.Stratified = function(dataset = dat,
                           pDigits = digits_pvalue,
                           catDigits = digits_categorical,
                           contDigits = digits_continuous,
-                          noSpaces = TRUE),
+                          noSpaces = TRUE,
+                          showAllLevels = categorical.variables_report.all.levels),
                     stringsAsFactors = FALSE)
   
   
@@ -164,7 +167,8 @@ Overall.And.Stratified = function(dataset = dat,
                                      pDigits = digits_pvalue,
                                      catDigits = digits_categorical,
                                      contDigits = digits_continuous,
-                                     noSpaces = TRUE),
+                                     noSpaces = TRUE,
+                                     showAllLevels = categorical.variables_report.all.levels),
                                stringsAsFactors = FALSE)
     
     ## Extract the test information
