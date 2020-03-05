@@ -103,6 +103,10 @@ Overall.And.Stratified = function(dataset = dat,
   ## Stratified Table ##
   ######################
   
+  ## If there are more than 2 levels for the strata variable, then assume equal variances
+  if( length( unique(dataset[, strata.variable ]) ) == 2 ){ tmp_var.equal = FALSE }
+  else{ tmp_var.equal = TRUE }
+  
   ## Only do if the stratified table is requested
   if( length(strata.variable) > 0 ){
     
@@ -112,6 +116,7 @@ Overall.And.Stratified = function(dataset = dat,
                                strata = strata.variable,
                                data = dataset,
                                argsExact = list(simulate.p.values = TRUE, B = 10000),
+                               argsNormal = list(var.equal = tmp_var.equal),
                                test = TRUE)
     
     ## Identify variables where an exact analysis is necessary
@@ -154,6 +159,7 @@ Overall.And.Stratified = function(dataset = dat,
                                factorVars = factor.variables,
                                strata = strata.variable,
                                data = dataset,
+                               argsNormal = list(var.equal = tmp_var.equal),
                                test = TRUE)
     
     ## Covert the table to a dataframe
