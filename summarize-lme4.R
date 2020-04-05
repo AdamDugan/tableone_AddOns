@@ -69,15 +69,15 @@ lme4_table = function(Model.Object,
   }
   
   ## Round the values
-  tmp_table$Estimate = round(tmp_table$Estimate, Digits_Estimate)
-  tmp_ci$LowerCL = round(tmp_ci$LowerCL, Digits_Estimate)
-  tmp_ci$UpperCL = round(tmp_ci$UpperCL, Digits_Estimate)
-  tmp_table$SE = round(tmp_table$SE, Digits_SE)
-  tmp_table$Pvalue = round(tmp_table$Pvalue, Digits_Pvalue)
+  tmp_table$Estimate = format(x = round(tmp_table$Estimate, Digits_Estimate), nsmall = Digits_Estimate)
+  tmp_ci$LowerCL = format(x = round(tmp_ci$LowerCL, Digits_Estimate), nsmall = Digits_Estimate)
+  tmp_ci$UpperCL = format(x = round(tmp_ci$UpperCL, Digits_Estimate), nsmall = Digits_Estimate)
+  tmp_table$SE = format(x = round(tmp_table$SE, Digits_SE), nsmall = Digits_SE)
+  tmp_table$Pvalue = format(x = round(tmp_table$Pvalue, Digits_Pvalue), nsmall = Digits_Pvalue)
   if( class(Model.Object)[1] == "glmerMod" ){ tmp_table$Zvalue = round(tmp_table$Zvalue, Digits_Statistic) }
   else if( class(Model.Object) %in% c("lmerModLmerTest","lmerMod") ){
-    tmp_table$DF = round(tmp_table$DF, Digits_DF)
-    tmp_table$Tvalue = round(tmp_table$Tvalue, Digits_Statistic) }
+    tmp_table$DF = format(x = round(tmp_table$DF, Digits_DF), nsmall = Digits_DF)
+    tmp_table$Tvalue = format(x = round(tmp_table$Tvalue, Digits_Statistic), nsmall = Digits_Statistic) }
   else{ return("Not a lme4 model object???") }
   
   ## Handle p-value of 0
@@ -88,7 +88,7 @@ lme4_table = function(Model.Object,
   }
   rm(i, tmp_zeros)
   
-  ## COmbine the confidence limits
+  ## Combine the confidence limits
   tmp_ci$ConfidenceInterval = apply(X = tmp_ci[, c("LowerCL","UpperCL") ], MARGIN = 1,
                                     FUN = function(x){ return( paste0("(", x[1], ", ", x[2], ")") ) } )
   
@@ -97,7 +97,8 @@ lme4_table = function(Model.Object,
                     y = tmp_ci[, c("Parameter","ConfidenceInterval")],
                     by = "Parameter",
                     all.x = TRUE,
-                    all.y = FALSE)
+                    all.y = FALSE,
+                    sort = FALSE)
   
   ## Rearrange the columns
   if( class(Model.Object)[1] == "glmerMod" ){ 
