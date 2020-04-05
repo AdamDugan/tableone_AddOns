@@ -84,7 +84,7 @@ lme4_table = function(Model.Object,
   tmp_table$Pvalue = as.character(tmp_table$Pvalue)
   for(i in 1:nrow(tmp_table)){
     tmp_zeros = paste0( rep("0", (Digits_Pvalue - 1)), collapse = "" )
-    if( tmp_table$Pvalue[i] == "0" ){ tmp_table$Pvalue[i] = paste0("<0.", tmp_zeros, "1") }
+    if( tmp_table$Pvalue[i] == paste0("0.0", tmp_zeros) ){ tmp_table$Pvalue[i] = paste0("<0.", tmp_zeros, "1") }
   }
   rm(i, tmp_zeros)
   
