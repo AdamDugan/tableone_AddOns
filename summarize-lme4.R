@@ -84,12 +84,13 @@ lme4_table = function(Model.Object,
   tmp_table$Pvalue = as.character(tmp_table$Pvalue)
   for(i in 1:nrow(tmp_table)){
     tmp_zeros = paste0( rep("0", (Digits_Pvalue - 1)), collapse = "" )
-    if( tmp_table$Pvalue[i] == paste0("0.0", tmp_zeros) ){ tmp_table$Pvalue[i] = paste0("<0.", tmp_zeros, "1") }
+    if( as.numeric(tmp_table$Pvalue[i]) == 0 ){ tmp_table$Pvalue[i] = paste0("<0.", tmp_zeros, "1") }
   }
   rm(i, tmp_zeros)
   
   ## Combine the confidence limits
-  tmp_ci$ConfidenceInterval = apply(X = tmp_ci[, c("LowerCL","UpperCL") ], MARGIN = 1,
+  tmp_ci$ConfidenceInterval = apply(X = tmp_ci[, c("LowerCL","UpperCL") ],
+                                    MARGIN = 1,
                                     FUN = function(x){ return( paste0("(", x[1], ", ", x[2], ")") ) } )
   
   ## Merge the tables together
