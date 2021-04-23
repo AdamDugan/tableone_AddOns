@@ -27,6 +27,7 @@ lme4_table = function(Model.Object,
                       Exponentiate.Estimates = FALSE,
                       Confidence.Level = 0.95,
                       Confidence.Mehtod = "profile",
+                      ddf.Method = "Satterthwaite",
                       Reference.Label = "ref.",
                       Digits_Estimate = 3,
                       Digits_Pvalue = 3,
@@ -42,7 +43,7 @@ lme4_table = function(Model.Object,
   ##############################
   
   ## Extract the model summary
-  tmp_table = data.frame( summary(Model.Object)$coefficients, stringsAsFactors = FALSE )
+  tmp_table = data.frame( summary(Model.Object, ddf = ddf.Method)$coefficients, stringsAsFactors = FALSE )
   tmp_table = cbind("Parameter" = row.names(tmp_table), tmp_table)
   
   ## Name the columns
