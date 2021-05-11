@@ -96,31 +96,23 @@ Regression.Summary = function(Model.Object,
   coefs$Statistic = round( as.numeric(coefs$Statistic), Digits_Statistic)
   coefs$`P-value` = round( as.numeric(coefs$`P-value`), Digits_Pvalue)
   
-  
   ## Should the estimates be exponentiated?
   if( Exponentiate.Estimates == TRUE ){
-    
-    ## Calculate the exponentiated estimates
     coefs$Estimate = round( exp( coefs$Estimate ), Digits_Estimate)
-    cis = exp( round(confint(Model.Object), Digits_Estimate) )
-    cis = data.frame( cbind(row.names(cis), cis), stringsAsFactors = FALSE )
-    if( ncol(cis) == 3 ){
-      names(cis) = c("Parameter","CL_Lower","CL_Upper")
-    } else if( ncol(cis) == 2 ){
-      cis <- cbind(c(Parameter = coefs$Parameter[1]), cis)
-      names(cis) = c("Parameter","CL_Lower","CL_Upper")
-    }
+    cis <- exp( round( confint(Model.Object), Digits_Estimate) )
+  } else{
+    cis <- round( confint(Model.Object), Digits_Estimate)
   }
-  else{
-    ## Calculate the confidence intervals - non-exponentiated
-    cis = round( confint(Model.Object), Digits_Estimate)
-    cis = data.frame( cbind(row.names(cis), cis), stringsAsFactors = FALSE )
-    if( ncol(cis) == 3 ){
-      names(cis) = c("Parameter","CL_Lower","CL_Upper")
-    } else if( ncol(cis) == 2 ){
-      cis <- cbind(c(Parameter = coefs$Parameter[1]), cis)
-      names(cis) = c("Parameter","CL_Lower","CL_Upper")
-    }
+  
+  ## Modify the CI results
+  if( is.null( dim(cis) ) ){
+    cis <- data.frame(Parameter = coef$Parameter[1],
+                      CL_Lower = as.numeric( cis[1] ),
+                      CL_Upper = as.numeric( cis[2] ),
+                     stringsAsFactors = FALSE)
+  } else{
+    cis <- data.frame( cbind(row.names(cis), cis), stringsAsFactors = FALSE )
+    names(cis) = c("Parameter","CL_Lower","CL_Upper")
   }
   
   ## Bring over the CI's
