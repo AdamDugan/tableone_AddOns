@@ -135,7 +135,9 @@ Regression.Summary = function(Model.Object,
   ########################
   
   ## Edit the intercept row
-  coefs$Parameter[ coefs$Parameter == "(Intercept)" ] = "Model Intercept"
+  if( nrow(coefs) > 1 ){
+    coefs$Parameter[ coefs$Parameter == "(Intercept)" ] = "Model Intercept"
+  }
   
   ## Identify the variable name for each row
   coefs$Variable = unlist( apply(X = matrix(coefs$Parameter), MARGIN = 1,
@@ -157,7 +159,7 @@ Regression.Summary = function(Model.Object,
       coefs$Variable_Sequence[ temp.rows ] = 2:( length(temp.rows) + 1 )
     }
   }
-  rm(i, temp.rows)
+  rm(i)
   
   ## Make all values character
   coefs = data.frame(lapply(coefs, as.character), stringsAsFactors = FALSE, check.names = FALSE)
@@ -193,7 +195,7 @@ Regression.Summary = function(Model.Object,
     }
     
   }
-  rm(i, temp.coefs, temp.rows, temp.vars)
+  rm(i, temp.vars)
   
   ## Bring over the variable labels
   coefs$Label = NA
