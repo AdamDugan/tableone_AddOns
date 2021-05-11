@@ -104,13 +104,23 @@ Regression.Summary = function(Model.Object,
     coefs$Estimate = round( exp( coefs$Estimate ), Digits_Estimate)
     cis = exp( round(confint(Model.Object), Digits_Estimate) )
     cis = data.frame( cbind(row.names(cis), cis), stringsAsFactors = FALSE )
-    names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    if( ncol(cis) == 3 ){
+      names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    } else if( ncol(cis) == 2 ){
+      cis <- cbind(c(Parameter = coefs$Parameter[1]), cis)
+      names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    }
   }
   else{
     ## Calculate the confidence intervals - non-exponentiated
     cis = round( confint(Model.Object), Digits_Estimate)
     cis = data.frame( cbind(row.names(cis), cis), stringsAsFactors = FALSE )
-    names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    if( ncol(cis) == 3 ){
+      names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    } else if( ncol(cis) == 2 ){
+      cis <- cbind(c(Parameter = coefs$Parameter[1]), cis)
+      names(cis) = c("Parameter","CL_Lower","CL_Upper")
+    }
   }
   
   ## Bring over the CI's
