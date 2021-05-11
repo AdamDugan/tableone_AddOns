@@ -106,7 +106,7 @@ Regression.Summary = function(Model.Object,
   
   ## Modify the CI results
   if( is.null( dim(cis) ) ){
-    cis <- data.frame(Parameter = coef$Parameter[1],
+    cis <- data.frame(Parameter = coefs$Parameter[1],
                       CL_Lower = as.numeric( cis[1] ),
                       CL_Upper = as.numeric( cis[2] ),
                      stringsAsFactors = FALSE)
