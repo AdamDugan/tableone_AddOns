@@ -525,6 +525,9 @@ Overall.And.Stratified = function(dataset = dat,
     ## Remove the strata columns and p-value column from the overall table
     tab <- tab[, c(1, 2) ]
     
+    ## Make the test.info object NULL
+    test.info <- NULL
+    
   }
   
   
@@ -534,49 +537,13 @@ Overall.And.Stratified = function(dataset = dat,
   ########################
   ## Return the Results ##
   ########################
-  
-  ## Always include the test info list
-  test.info_include.as.list = TRUE
-  
-  ## Test only
-  if( test.info_include.as.list == TRUE & missing.data_include.as.list == FALSE & missing.data_include.as.separate.table == FALSE ){
-    return( list(Table = tab, Test.Info = test.info) ) }
-  
-  ## MD list only
-  else if( test.info_include.as.list == FALSE & missing.data_include.as.list == TRUE & missing.data_include.as.separate.table == FALSE ){
-    return( list(Table = tab, Missing.Data_List = missing.data_list) ) }
-  
-  ## MD table only
-  else if( test.info_include.as.list == FALSE & missing.data_include.as.list == FALSE & missing.data_include.as.separate.table == TRUE ){
-    return( list(Table = tab, Missing.Data_Table = missing.data_table) ) }
-  
-  ## Test and MD list
-  else if( test.info_include.as.list == TRUE & missing.data_include.as.list == TRUE & missing.data_include.as.separate.table == FALSE  ){
-    return( list(Table = tab,
-                 Test.Info = test.info,
-                 Missing.Data_List = missing.data_list) ) }
-  
-  ## Test and MD table
-  else if( test.info_include.as.list == TRUE & missing.data_include.as.list == FALSE & missing.data_include.as.separate.table == TRUE  ){
-    return( list(Table = tab,
-                 Test.Info = test.info,
-                 Missing.Data_Table = missing.data_table) ) }
-  
-  ## MD list and MD table
-  else if( test.info_include.as.list == FALSE & missing.data_include.as.list == TRUE & missing.data_include.as.separate.table == TRUE  ){
-    return( list(Table = tab,
-                 Missing.Data_List = missing.data_list,
-                 Missing.Data_Table = missing.data_table) ) }
-  
-  ## Everything
-  else if( sum(test.info_include.as.list,missing.data_include.as.list, missing.data_include.as.separate.table) == 3 ){
-    return( list(Table = tab,
+                            
+  ## Simplify things and just return all items
+  return( list(Table = tab,
                  Test.Info = test.info,
                  Missing.Data_List = missing.data_list,
-                 Missing.Data_Table = missing.data_table) ) }
+                 Missing.Data_Table = missing.data_table) )
   
-  ## No other Options
-  else if( sum(test.info_include.as.list, missing.data_include.as.list, missing.data_include.as.separate.table) == 0 ){ return( list(Table = tab) ) }
 }
 
 
