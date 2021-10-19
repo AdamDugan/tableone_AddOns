@@ -103,10 +103,9 @@ Overall.And.Stratified = function(dataset = dat,
   ## Stratified Table ##
   ######################
   
-  ## If there are more than 2 levels for the strata variable, then assume equal variances
-  if( length( unique(dataset[, strata.variable ]) ) == 2 ){ tmp_var.equal = FALSE }
-  else{ tmp_var.equal = TRUE }
-  
+  ## Assume equal variances no matter how many levels there are in the strata
+  tmp_var.equal = FALSE
+    
   ## Only do if the stratified table is requested
   if( length(strata.variable) > 0 ){
     
