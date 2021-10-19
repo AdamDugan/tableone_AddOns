@@ -105,14 +105,26 @@ Overall.And.Stratified = function(dataset = dat,
   
   ## Assume equal variances no matter how many levels there are in the strata
   tmp_var.equal = FALSE
+  
+  ## Create a fake strata variable if one wasn't provided
+  if( is.null(strata.variable) ){
+    strata_var <- sample(x = c(0, 1),
+                         size = nrow(dat),
+                         replace = TRUE)
+    strata_var_name <- "Strata"
+    dataset[, strata_var_name ] <- strata_var
+  } else{
+    strata_var <- dataset[, strata.variable ]
+    strata_var_name <- strata.variable
+  }
     
   ## Only do if the stratified table is requested
-  if( length(strata.variable) > 0 ){
+  if( length(strata_var) > 0 ){
     
     ## Create the stratified table
     tab.strat = CreateTableOne(vars = variables,
                                factorVars = factor.variables,
-                               strata = strata.variable,
+                               strata = strata_var_name,
                                data = dataset,
                                argsExact = list(simulate.p.values = TRUE, B = 10000),
                                argsNormal = list(var.equal = tmp_var.equal),
@@ -133,7 +145,7 @@ Overall.And.Stratified = function(dataset = dat,
         ## For each categorical variable, see if the chi-square test results in a warning
         chi.square.warning = rep(NA, length(cat.vars))
         for(i in 1:length(chi.square.warning)){
-          chi.square.warning[i] = has_warning( chisq.test( table(dataset[,strata.variable], dataset[,cat.vars[i]]) ) )
+          chi.square.warning[i] = has_warning( chisq.test( table(dataset[,strata_var_name], dataset[,cat.vars[i]]) ) )
         }
         rm(i)
         
@@ -156,7 +168,7 @@ Overall.And.Stratified = function(dataset = dat,
     ## Re-run the table to include exact analyses
     tab.strat = CreateTableOne(vars = variables,
                                factorVars = factor.variables,
-                               strata = strata.variable,
+                               strata = strata_var_name,
                                data = dataset,
                                argsNormal = list(var.equal = tmp_var.equal),
                                test = TRUE)
@@ -196,7 +208,7 @@ Overall.And.Stratified = function(dataset = dat,
       for(i in 1:length(failed.exact)){
         
         ## Calculate the p-value
-        p.val = fisher.test(x = table( dataset[,strata.variable], dataset[, failed.exact[i] ] ),
+        p.val = fisher.test(x = table( dataset[,strata_var_name], dataset[, failed.exact[i] ] ),
                             simulate.p.value = TRUE,
                             B = 10000)$p.value
         p.val = round(p.val, digits_pvalue)
@@ -299,9 +311,9 @@ Overall.And.Stratified = function(dataset = dat,
       ## Is the variable actually a factor?
       if( is.factor( dataset[,factors_reported.categorical.analyzed.ordinal[i] ] ) ){
         ## Calculate the p-value
-        p.value = kruskal.test(x = as.numeric( dataset[,factors_reported.categorical.analyzed.ordinal[i] ] ), g = dataset[, strata.variable] )$p.value
+        p.value = kruskal.test(x = as.numeric( dataset[,factors_reported.categorical.analyzed.ordinal[i] ] ), g = dataset[, strata_var_name] )$p.value
       }
-      else{ p.value = kruskal.test(x = dataset[,factors_reported.categorical.analyzed.ordinal[i] ], g = dataset[, strata.variable] )$p.value }
+      else{ p.value = kruskal.test(x = dataset[,factors_reported.categorical.analyzed.ordinal[i] ], g = dataset[, strata_var_name] )$p.value }
       
       ## Round the p-value
       p.value = round(p.value, digits_pvalue)
@@ -341,10 +353,10 @@ Overall.And.Stratified = function(dataset = dat,
       rm(counts_missing.data)
       
       ## Include missing values for the strata if they exist 
-      if( length(strata.variable) > 0 ){
+      if( !is.null(strata.variable) ){
         
         ## Identify the strata levels if they are requested
-        strata.levels = unique( dataset[,strata.variable] )
+        strata.levels = unique( dataset[, strata_var_name] )
         strata.levels = strata.levels[ !is.na(strata.levels) ]
         strata.levels = strata.levels[ order(strata.levels) ]
         
@@ -357,7 +369,7 @@ Overall.And.Stratified = function(dataset = dat,
         ## Fill in the strata-specific missing values
         for(i in 1:nrow(missing)){
           for(k in 1:length(strata.levels)){
-            missing[i,(k+2)] = sum( is.na( dataset[ dataset[,strata.variable] == strata.levels[k], missing$Variable[i]] ), na.rm = TRUE )
+            missing[i,(k+2)] = sum( is.na( dataset[ dataset[, strata_var_name] == strata.levels[k], missing$Variable[i]] ), na.rm = TRUE )
           }
         }
         rm(i,k)
@@ -498,6 +510,23 @@ Overall.And.Stratified = function(dataset = dat,
   
   ## Remove the row names
   row.names(tab) = NULL
+  
+                            
+                            
+                            
+                            
+  ########################################
+  ## Remove the Fake Strata Information ##
+  ########################################
+  
+  ## Only perform these steps if a strata variable wasn't provided
+  if( is.null(strata.variable) ){
+    
+    ## Remove the strata columns and p-value column from the overall table
+    tab <- tab[, c(1, 2) ]
+    
+  }
+  
   
   
   
