@@ -525,8 +525,8 @@ Overall.And.Stratified = function(dataset = dat,
     ## Remove the strata columns and p-value column from the overall table
     tab <- tab[, c(1, 2) ]
     
-    ## Make the test.info object NULL
-    test.info <- NULL
+    ## Update the test.info object
+    test.info <- "No statistical tests were performed"
     
   }
   
@@ -540,9 +540,9 @@ Overall.And.Stratified = function(dataset = dat,
                             
   ## Simplify things and just return all items
   return( list(Table = tab,
-                 Test.Info = test.info,
-                 Missing.Data_List = missing.data_list,
-                 Missing.Data_Table = missing.data_table) )
+               Test.Info = test.info,
+               Missing.Data_List = missing.data_list,
+               Missing.Data_Table = missing.data_table) )
   
 }
 
