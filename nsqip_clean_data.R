@@ -203,8 +203,8 @@ nsqip_clean_data <- function(dataset = dat){
   ## Return the cleaned up dataset and variable summary
   return(
     list(
-      dataset,
-      variable_summary)
+      Data = dataset,
+      VariableSummary = variable_summary)
     )
   
 }
