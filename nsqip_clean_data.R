@@ -179,6 +179,13 @@ nsqip_clean_data <- function(dataset = dat){
   ## Create a Variable Summary Data Frame ##
   ##########################################
   
+  ## Create a variable summary data frame
+  variable_summary <- data.frame(Variable = names(dataset),
+                                Label = names(dataset),
+                                stringsAsFactors = FALSE)
+  
+  
+  
   
   
   ######################################
