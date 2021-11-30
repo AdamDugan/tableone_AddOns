@@ -1,6 +1,6 @@
 
 ## A description of the function's arguments:
-## puf_folder_name: a text string representing the name of the folder containing the PUF text files (the "here" package will use this to locate the files)
+## puf_folder_path: a text string representing the path of the folder containing the PUF text files; the text string must not end with "/"!
 ## puf_years: the years to include in the extract
 ## cpt_codes: the CPT codes to include in the extract. If NULL, then return all codes.
 ##            Based on the following fields: "CPT", "OTHERCPT1" - "OTHERCPT10", and "CONCPT1" - "CONCPT10"
@@ -18,7 +18,7 @@
 ## surgical_specialty: a character vector of surgical specialty to subset to (based on the "SURGSPEC" field).
 
 ## The function
-nsqip_subset_pufs <- function(puf_folder_name = "Raw Files",
+nsqip_subset_pufs <- function(puf_folder_path = "Raw Files",
                               puf_years = 2012:2019,
                               cpt_codes = NULL,
                               cpt_codes_primary_only = TRUE,
@@ -59,14 +59,14 @@ nsqip_subset_pufs <- function(puf_folder_name = "Raw Files",
   #   list(year = 2013, file = "Raw Files\\acs_nsqip_puf13.txt"),
   #   list(year = 2012, file = "Raw Files\\acs_nsqip_puf12.txt"))
   file_dictionary <- list(
-    list(year = 2019, file = here::here(puf_folder_name, "acs_nsqip_puf19.txt")),
-    list(year = 2018, file = here::here(puf_folder_name, "acs_nsqip_puf18_v2.txt")),
-    list(year = 2017, file = here::here(puf_folder_name, "acs_nsqip_puf17.txt")),
-    list(year = 2016, file = here::here(puf_folder_name, "acs_nsqip_puf16.txt")),
-    list(year = 2015, file = here::here(puf_folder_name, "acs_nsqip_puf15_v2.txt")),
-    list(year = 2014, file = here::here(puf_folder_name, "acs_nsqip_puf14.txt")),
-    list(year = 2013, file = here::here(puf_folder_name, "acs_nsqip_puf13.txt")),
-    list(year = 2012, file = here::here(puf_folder_name, "acs_nsqip_puf12.txt")))
+    list(year = 2019, file = paste0(puf_folder_path, "/acs_nsqip_puf19.txt")),
+    list(year = 2018, file = paste0(puf_folder_path, "/acs_nsqip_puf18_v2.txt")),
+    list(year = 2017, file = paste0(puf_folder_path, "/acs_nsqip_puf17.txt")),
+    list(year = 2016, file = paste0(puf_folder_path, "/acs_nsqip_puf16.txt")),
+    list(year = 2015, file = paste0(puf_folder_path, "/acs_nsqip_puf15_v2.txt")),
+    list(year = 2014, file = paste0(puf_folder_path, "/acs_nsqip_puf14.txt")),
+    list(year = 2013, file = paste0(puf_folder_path, "/acs_nsqip_puf13.txt")),
+    list(year = 2012, file = paste0(puf_folder_path, "/acs_nsqip_puf12.txt")))
   
   ## An empty data frame to store the data (with the names of the most recent year)
   dat <- janitor::clean_names(fread(file = file_dictionary[[1]]$file,
