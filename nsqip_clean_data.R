@@ -368,7 +368,7 @@ nsqip_clean_data <- function(dataset = dat){
                                                  FUN = function(x){
                                                    if( (!is.na(x[1]) & x[1] == "Yes") |
                                                       (!is.na(x[2]) & x[2] == "Yes") |
-                                                      (!is.na(x[3]) $ x[3] == "Yes")){
+                                                      (!is.na(x[3]) & x[3] == "Yes")){
                                                      return("Yes")
                                                    } else if( is.na(x[1]) & is.na(x[2]) & is.na(x[3]) ){
                                                      return(NA)
