@@ -389,7 +389,7 @@ nsqip_clean_data <- function(dataset = dat){
                                                                 "comp_cardiac_arrest","comp_mi","comp_stroke",
                                                                 "comp_mortality") ],
                                                 MARGIN = 1,
-                                                FUN = functions(x){
+                                                FUN = function(x){
                                                   if( sum(is.na(x)) == length(x) ){
                                                     return(NA)
                                                   } else if( sum(x == "Yes", na.rm = TRUE) > 0 ){
@@ -405,7 +405,7 @@ nsqip_clean_data <- function(dataset = dat){
                                                                 "comp_renal_failure","comp_pulm_embolism","comp_dvt",
                                                                 "comp_cardiac_arrest","comp_mi","comp_stroke") ],
                                                 MARGIN = 1,
-                                                FUN = functions(x){
+                                                FUN = function(x){
                                                   if( sum(is.na(x)) == length(x) ){
                                                     return(NA)
                                                   } else if( sum(x == "Yes", na.rm = TRUE) > 0 ){
