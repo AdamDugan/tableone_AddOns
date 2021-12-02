@@ -32,6 +32,11 @@ nsqip_clean_data <- function(dataset = dat){
   ## Create Factor Variables ##
   #############################
   
+  ## Sex
+  dataset$sex <- factor(x = dataset$sex,
+                        levels = c("male","female"),
+                        labels = c("Male","Female"))
+  
   ## Race
   dataset$racenew <- factor(x = dataset$racenew,
                             levels = c("White","Black or African American","Asian","American Indian or Alaska Native",
@@ -59,24 +64,20 @@ nsqip_clean_data <- function(dataset = dat){
   dataset$cdmi <- factor(x = dataset$cdmi,
                          levels = c("No Complication","Myocardial Infarction"))
   
+  ## Wound closure
+  dataset$woundclosure <- factor(x = dataset$woundclosure,
+                                 levels = c("All layers of incision (deep and superficial) fully closed",
+                                            "Only deep layers closed; superficial left open",
+                                            "No layers of incision are surgically closed"))
+  
   ## Factor variables that don't require re-ordering of levels
-  dataset$caseid <- factor(x = dataset$caseid)
-  dataset$inout <- factor(x = dataset$inout)
-  dataset$emergncy <- factor(x = dataset$emergncy)
-  dataset$wndclas <- factor(x = dataset$wndclas)
-  dataset$orgspcssi <- factor(x = dataset$orgspcssi)
-  dataset$supinfec <- factor(x = dataset$supinfec)
-  dataset$dehis <- factor(x = dataset$dehis)
-  dataset$oupneumo <- factor(x = dataset$oupneumo)
-  dataset$othbleed <- factor(x = dataset$othbleed)
-  dataset$urninfec <- factor(x = dataset$urninfec)
-  dataset$reintub <- factor(x = dataset$reintub)
-  dataset$failwean <- factor(x = dataset$failwean)
-  dataset$othsysep <- factor(x = dataset$othsysep)
-  dataset$othseshock <- factor(x = dataset$othseshock)
-  dataset$renainsf <- factor(x = dataset$renainsf)
-  dataset$pulembol <- factor(x = dataset$pulembol)
-  dataset$cnscva <- factor(x = dataset$cnscva)
+  vars <- c("ventilat","hxcopd","ascites","hxchf","hypermed","renafail","dialysis","discancr","wndinf","steroid","wtloss","bleeddis","transfus","prsepis",
+           "smoke","caseid","inout","emergncy","fnstatus2","wndclas","orgspcssi","supinfec","dehis","oupneumo","othbleed","urninfec","reintub","failwean",
+            "othsysep","othseshock","renainsf","pulembol","cnscva")
+  for(i in 1:length(vars)){
+    dataset[, i] <- factor(x = dataset[, i])
+  }
+  rm(i, vars)
   
   
   
@@ -164,6 +165,11 @@ nsqip_clean_data <- function(dataset = dat){
   dataset$age_90imp <- dataset$age
   dataset$age_90imp[ dataset$age_90imp == "90+" ] <- "90"
   dataset$age_90imp <- as.numeric(dataset$age_90imp)
+  
+  ## Preop sepsis
+  dataet$prsepis_any <- factor(x = as.numeric(dataset$prsepis %in% c("Sepsis","SIRS")),
+                               levels = c(0, 1),
+                                labels = c("No","Yes"))
   
   ## BMI
   dataset$bmi <- ((dataset$weight / (dataset$height * dataset$height)) * 703)
@@ -423,6 +429,7 @@ nsqip_clean_data <- function(dataset = dat){
   variable_summary <- data.frame(Variable = names(dataset),
                                  Label = names(dataset),
                                  Variable_Type = NA,
+                                 Variable_Category = NA,
                                  stringsAsFactors = FALSE)
   
   ## Identify continuous variables
@@ -444,12 +451,42 @@ nsqip_clean_data <- function(dataset = dat){
   vars_ord <- c("wndclas","asaclas_group","bmi_group","admqtr",
                 "nsupinfec","nwndinfd","norgspcssi","ndehis","noupneumo","nreintub","npulembol","nfailwean","nrenainsf",
                 "noprenafl","nurninfec","ncnscva","ncdarrest","ncdmi","nothbleed","nothdvt","nothsysep","nothseshock",
-                "nothcdiff")
+                "nothcdiff","fnstatus2","woundclosure")
   
   ## Define variable types
   variable_summary$Variable_Type <- "Categorical"
   variable_summary$Variable_Type[ variable_summary$Variable %in% vars_cont ] <- "Continuous"
   variable_summary$Variable_Type[ variable_summary$Variable %in% vars_ord ] <- "Ordinal"
+  
+  ## Identify common patient characteristic variables
+  vars_pat <- c("age_90imp","sex","racenew","ethnicityhispanic","bmi","bmi_gte30",
+               "smoke","diabetes_present","dyspnea_present","fnstatus2",
+               "ventilat","hxcopd","ascites","hxchf","hypermed","renafail",
+               "dialysis","discancr","wndinf","steroid","wtloss","bleeddis",
+               "transfus","prsepis_any")
+  
+  ## Identify common surgical charactistic variables
+  vars_surg <- c("optime","cpt","asaclas_group","wndclas","inout","electsurg","emergncy","woundclosure")
+  
+  ## Identify lab value variables, continuous
+  vars_labs_cont <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkph","prwbc","prhct","prplate","prptt","prinr","prpt")
+  
+  ## Identify lab value variables, dichotomous
+  vars_labs_dich <- c("pralbum_lt3","pralkph_gt125","prbili_gt1","prbun_gt40","prcreat_gt1p2","prhct_lt30","prhct_gt45","prplate_lt150","prplate_gt400",
+                      "prsgot_gt40","prsodm_lt135","prsodm_gt145","prwbc_lte4p5","prwbc_gt11")
+  
+  ## Identify outcome variables
+  vars_outs <- c("hospital_los_total","comp_mortality","comp_any_including_mortality","comp_any_excluding_mortality",
+                 "comp_ssi_any","comp_wound_disruption","comp_pneumonia","comp_transfusion","comp_uti","comp_unpl_intub_or_vent48",
+                 "comp_sepsis_or_septic_shock","comp_renal_insuff_or_failure","comp_pulm_embolism_or_dvt","comp_cardiac_arrest_mi_stroke")
+  
+  ## Define the variable categories
+  variable_summary$Variable_Category <- "Other"
+  variable_summary$Variable_Category[ variable_summary$Variable %in% vars_pat ] <- "Patient Characteristics"
+  variable_summary$Variable_Category[ variable_summary$Variable %in% vars_surg ] <- "Surgical Characteristics"
+  variable_summary$Variable_Category[ variable_summary$Variable %in% vars_labs_cont ] <- "Continous Lab Values"
+  variable_summary$Variable_Category[ variable_summary$Variable %in% vars_labs_dich ] <- "Dichotomous Lab Values"
+  variable_summary$Variable_Category[ variable_summary$Variable %in% vars_outs ] <- "Outcomes"
   
   ## A function to update variable labels
   update_label <- function(df = variable_summary, variable, label){
