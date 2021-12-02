@@ -324,7 +324,7 @@ nsqip_clean_data <- function(dataset = dat){
                                                   if( (!is.na(x[1]) & x[1] == "Yes") |
                                                      (!is.na(x[2]) & x[2] == "Yes") ){
                                                     return("Yes")
-                                                  } else if( is.na(x[1]) & is.na(x[2]) ) ){
+                                                  } else if( is.na(x[1]) & is.na(x[2]) ){
                                                     return(NA)
                                                   } else{ return("No") }
                                                     } )
@@ -345,7 +345,7 @@ nsqip_clean_data <- function(dataset = dat){
                                                if( (!is.na(x[1]) & x[1] == "Yes") |
                                                   (!is.na(x[2]) & x[2] == "Yes") ){
                                                  return("Yes")
-                                               } else if( is.na(x[1]) & is.na(x[2]) ) ){
+                                               } else if( is.na(x[1]) & is.na(x[2]) ){
                                                  return(NA)
                                                } else{ return("No") }
                                                  } )
