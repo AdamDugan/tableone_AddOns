@@ -331,7 +331,7 @@ nsqip_clean_data <- function(dataset = dat){
   dataset$comp_renal_insuff_or_failure <- factor(x = dataset$comp_renal_insuff_or_failure)
   
   ## Individual complication variables
-  dataset$comp_pulm_embolism <- factor(x = dataset$,
+  dataset$comp_pulm_embolism <- factor(x = dataset$pulembol,
                                        levels = c("No Complication","Pulmonary Embolism"),
                                        labels = c("No","Yes"))
   dataset$comp_dvt <- factor(x = dataset$othdvt,
