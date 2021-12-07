@@ -167,8 +167,8 @@ nsqip_clean_data <- function(dataset = dat){
   dataset$age_90imp <- as.numeric(dataset$age_90imp)
   
   ## Preop sepsis
-  dataet$prsepis_any <- factor(x = as.numeric(dataset$prsepis %in% c("Sepsis","SIRS")),
-                               levels = c(0, 1),
+  dataset$prsepis_any <- factor(x = as.numeric(dataset$prsepis %in% c("Sepsis","SIRS")),
+                                levels = c(0, 1),
                                 labels = c("No","Yes"))
   
   ## BMI
