@@ -172,6 +172,12 @@ nsqip_clean_data <- function(dataset = dat){
                                 labels = c("No","Yes"))
   
   ## BMI
+  if( is.factor(dataset$weight) ){
+    dataset$weight <- as.numeric( as.character(dataset$weight) )
+  }
+  if( is.factor(dataset$height) ){
+    dataset$height <- as.numeric( as.character(dataset$height) )
+  }
   dataset$weight[ dataset$weight == -99 ] <- NA
   dataset$height[ dataset$height == -99 ] <- NA
   dataset$bmi <- ((dataset$weight / dataset$height / dataset$height) * 703)
