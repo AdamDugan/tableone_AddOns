@@ -384,7 +384,9 @@ nsqip_clean_data <- function(dataset = dat){
                                                      } )
   
   ## Mortality
-  dataset$comp_mortality <- factor(x = as.numeric( !is.na(dataset$dopertod) | dataset$dopertod >= 0),
+  dataset$comp_mortality <- as.numeric( !is.na(dataset$dopertod) & dataset$dopertod >= 0 & dataset$dopertod <= 30)
+  dataset$comp_mortality[ is.na(dataset$comp_mortality) ] <- 0
+  dataset$comp_mortality <- factor(x = dataset$comp_mortality,
                                    levels = c(0, 1),
                                    labels = c("No","Yes"))
   
