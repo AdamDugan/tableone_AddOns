@@ -172,6 +172,8 @@ nsqip_clean_data <- function(dataset = dat){
                                 labels = c("No","Yes"))
   
   ## BMI
+  dataset$weight <- as.numeric(dataset$weight)
+  dataset$height <- as.numeric(dataset$height)
   dataset$bmi <- ((dataset$weight / (dataset$height * dataset$height)) * 703)
   
   ## BMI > 30
