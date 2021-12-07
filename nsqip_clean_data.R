@@ -518,7 +518,7 @@ nsqip_clean_data <- function(dataset = dat){
   variable_summary <- update_label(variable = "hypermed", label = "Hypertension requiring medication")
   variable_summary <- update_label(variable = "renafail", label = "Acute renal failure (pre-op)")
   variable_summary <- update_label(variable = "dialysis", label = "Currently on dialysis (pre-op)")
-  variable_summary <- update_label(variable = "discancr", label = "disseminated cancer")
+  variable_summary <- update_label(variable = "discancr", label = "Disseminated cancer")
   variable_summary <- update_label(variable = "wndinf", label = "Open wound (with or without infection)")
   variable_summary <- update_label(variable = "steroid", label = "Steroid/Immunosuppressant usre for a chronic condition")
   variable_summary <- update_label(variable = "wtloss", label = "Greater than 10% loss of body weight in the 6 months prior to surgery")
