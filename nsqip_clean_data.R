@@ -162,7 +162,7 @@ nsqip_clean_data <- function(dataset = dat){
   ##########################
   
   ## Impute the age values of "90+" to "90"
-  dataset$age_90imp <- dataset$age
+  dataset$age_90imp <- as.character(dataset$age)
   dataset$age_90imp[ dataset$age_90imp == "90+" ] <- "90"
   dataset$age_90imp <- as.numeric(dataset$age_90imp)
   
