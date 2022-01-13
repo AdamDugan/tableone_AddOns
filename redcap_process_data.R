@@ -15,6 +15,8 @@
 ##                                 (which should be under the current project's directory)
 ## redcap_data_file_name = the name of the REDCap data file, including the ".csv" file type
 ## redcap_r_script_name = the name of the REDCap R script file, including the ".R" file type
+## create_combined_factor_variables = TRUE/FALSE as to whether or not variables with similar names should be combined 
+##                                    into a single overall variable if the sub-variables are found to be mutually exclusive
 
 
 
@@ -25,7 +27,8 @@
 ## A function to process the REDCap data 
 redcap_process_data <- function(folder_name_with_redcap_files = "data",
                                 redcap_data_file_name = "data-file-name.csv",
-                                redcap_r_script_name = "r-script-name.R"){
+                                redcap_r_script_name = "r-script-name.R",
+                                create_combined_factor_variables = TRUE){
   
   ## Load packages
   library(here)
@@ -91,22 +94,27 @@ redcap_process_data <- function(folder_name_with_redcap_files = "data",
   labs_final <- labs_all[ names(data) %in% c(vars_other, vars) ]
   
   ## Code to create combined variables for the factors that are mutually exclusive
-  vars_to_remove <- c()
-  for (var in var_groups){
-    if(length(vars[var == gsub("\\___.*","",vars)]) >1) {
-      if(max(rowSums(data[,vars[var == gsub("\\___.*","",vars)]])) == 1){
-        for (choice in vars[var == gsub("\\___.*","",vars)]){
-          #print(choice)
-          label <- gsub(").*","",gsub(".*=","",labs_vars[vars == choice]))
-          print(label)
-          data[data[,choice]==1,var] <- label
-          vars_to_remove <- c(vars_to_remove, choice)
+  if( create_combined_factor_variables = TRUE ){
+    vars_to_remove <- c()
+    for (var in var_groups){
+      if(length(vars[var == gsub("\\___.*","",vars)]) >1) {
+        if(max(rowSums(data[,vars[var == gsub("\\___.*","",vars)]])) == 1){
+          for (choice in vars[var == gsub("\\___.*","",vars)]){
+            #print(choice)
+            label <- gsub(").*","",gsub(".*=","",labs_vars[vars == choice]))
+            print(label)
+            data[data[,choice]==1,var] <- label
+            vars_to_remove <- c(vars_to_remove, choice)
+          }
+          data[,var] <- factor(data[,var])
         }
-        data[,var] <- factor(data[,var])
       }
-    }
   }
+    
+  ## Deleting variables that were replaced by a combined variable
+  data <- data[, ! names(data) %in% vars_to_remove]
   
+  }
   
   ## Update labels for the factor variables
   for (i in 1:length(vars)){
@@ -125,9 +133,6 @@ redcap_process_data <- function(folder_name_with_redcap_files = "data",
   
   ## Deleting the duplicate factor variables
   data <- data[, ! names(data) %in% vars_factor]
-  
-  ## Deleting variables that were replaced by a combined variable
-  data <- data[, ! names(data) %in% vars_to_remove]
   
   ## Return the processed data
   return(data)
