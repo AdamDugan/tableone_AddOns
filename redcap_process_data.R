@@ -94,7 +94,7 @@ redcap_process_data <- function(folder_name_with_redcap_files = "data",
   labs_final <- labs_all[ names(data) %in% c(vars_other, vars) ]
   
   ## Code to create combined variables for the factors that are mutually exclusive
-  if( create_combined_factor_variables = TRUE ){
+  if( create_combined_factor_variables ){
     vars_to_remove <- c()
     for (var in var_groups){
       if(length(vars[var == gsub("\\___.*","",vars)]) >1) {
