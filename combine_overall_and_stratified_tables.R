@@ -103,13 +103,13 @@ Overall.And.Stratified = function(dataset = dat,
   ## Stratified Table ##
   ######################
   
-  ## Assume equal variances no matter how many levels there are in the strata
+  ## Assume unequal variances no matter how many levels there are in the strata
   tmp_var.equal = FALSE
   
   ## Create a fake strata variable if one wasn't provided
   if( is.null(strata.variable) ){
     strata_var <- sample(x = c(0, 1),
-                         size = nrow(dat),
+                         size = nrow(dataset),
                          replace = TRUE)
     strata_var_name <- "Strata"
     dataset[, strata_var_name ] <- strata_var
