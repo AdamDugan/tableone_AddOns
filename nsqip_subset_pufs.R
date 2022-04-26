@@ -59,7 +59,7 @@ nsqip_subset_pufs <- function(puf_folder_path = "Raw Files",
   #   list(year = 2013, file = "Raw Files\\acs_nsqip_puf13.txt"),
   #   list(year = 2012, file = "Raw Files\\acs_nsqip_puf12.txt"))
   file_dictionary <- list(
-    list(year = 2020, file = paste0(puf_folder_path, "/acs_nsqip_puf20.txt"))
+    list(year = 2020, file = paste0(puf_folder_path, "/acs_nsqip_puf20.txt")),
     list(year = 2019, file = paste0(puf_folder_path, "/acs_nsqip_puf19.txt")),
     list(year = 2018, file = paste0(puf_folder_path, "/acs_nsqip_puf18_v2.txt")),
     list(year = 2017, file = paste0(puf_folder_path, "/acs_nsqip_puf17.txt")),
