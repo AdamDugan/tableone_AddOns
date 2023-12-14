@@ -276,7 +276,7 @@ Overall.And.Stratified = function(dataset = dat,
         else{
           temp.levels = unique( dataset[, classify.row.labels$Associated.Variable[i] ] )
           temp.levels = temp.levels[ !is.na(temp.levels) ]
-          temp.levels = temp.levels[ order(temp.levels) ]
+          #temp.levels = temp.levels[ order(temp.levels) ]
         }
         
         ## Identify which level the current row is
@@ -358,7 +358,7 @@ Overall.And.Stratified = function(dataset = dat,
         ## Identify the strata levels if they are requested
         strata.levels = unique( dataset[, strata_var_name] )
         strata.levels = strata.levels[ !is.na(strata.levels) ]
-        strata.levels = strata.levels[ order(strata.levels) ]
+        #strata.levels = strata.levels[ order(strata.levels) ]
         
         ## Create empty columns for the strata-specific missing data counts
         missing[ , paste0("Missing_Strata_", strata.levels) ] = NA
